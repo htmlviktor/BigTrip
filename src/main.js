@@ -7,13 +7,13 @@ import {makeSorting} from "./components/sorting";
 import {makeTripDays} from "./components/trip-days-container";
 
 import {renderComponents} from "./utils/utils";
+import {dataTasks} from "./data";
 
+const tripContainer = document.querySelector(`.trip-main__trip-info`);
+const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
+const tripContentContainer = document.querySelector(`.trip-events`);
 
-const tripContainer = document.querySelector('.trip-main__trip-info');
-const tripControlsContainer = document.querySelector('.trip-main__trip-controls');
-const tripContentContainer = document.querySelector('.trip-events');
-
-renderComponents(tripContainer, makeInfoTrip(), 'afterbegin');
+renderComponents(tripContainer, makeInfoTrip(), `afterbegin`);
 renderComponents(tripControlsContainer, makeMenu());
 renderComponents(tripControlsContainer, makeFilters());
 renderComponents(tripContentContainer, makeSorting());
@@ -21,12 +21,10 @@ renderComponents(tripContentContainer, makeSorting());
 renderComponents(tripContentContainer, makeTripDays());
 
 
-const renderCards = (counter) => {
-  const tripDayContainer = document.querySelector('.trip-events__list');
+const renderCards = () => {
+  const tripDayContainer = document.querySelector(`.trip-events__list`);
   renderComponents(tripDayContainer, makeCardCreate());
-  for (let i = 0; i < counter; i++) {
-    renderComponents(tripDayContainer, makeCard());
-  }
+  dataTasks.forEach((task) => renderComponents(tripDayContainer, makeCard(task)));
 };
 
-renderCards(5)
+renderCards(5);
