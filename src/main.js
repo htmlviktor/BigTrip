@@ -13,7 +13,9 @@ const tripContainer = document.querySelector(`.trip-main__trip-info`);
 const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripContentContainer = document.querySelector(`.trip-events`);
 
-renderComponents(tripContainer, makeInfoTrip(), `afterbegin`);
+renderComponents(tripContainer, makeInfoTrip(
+
+), `afterbegin`);
 renderComponents(tripControlsContainer, makeMenu());
 renderComponents(tripControlsContainer, makeFilters());
 renderComponents(tripContentContainer, makeSorting());
@@ -26,5 +28,8 @@ const renderCards = () => {
   renderComponents(tripDayContainer, makeCardCreate(dataTasks[0]));
   dataTasks.forEach((task) => renderComponents(tripDayContainer, makeCard(task)));
 };
+
+const priceElement = document.querySelector(`.trip-info__cost-value`);
+priceElement.textContent = dataTasks.map(({price}) => price).reduce((acc, cur) => acc + cur);
 
 renderCards(5);
