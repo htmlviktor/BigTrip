@@ -61,3 +61,4 @@ const makeTasks = (count) => {
 };
 
 export const dataTasks = makeTasks(4);
+console.log(dataTasks)
