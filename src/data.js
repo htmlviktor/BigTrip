@@ -32,22 +32,22 @@ const makeData = () => ({
     {
       title: `Add luggage`,
       price: 10,
-      status: Math.floor(Math.random()) ? true : false,
+      status: Boolean(Math.round(Math.random())),
     },
     {
       title: `Switch to comfort class`,
       price: 150,
-      status: Math.floor(Math.random()) ? true : false,
+      status: Boolean(Math.round(Math.random())),
     },
     {
       title: `Add meal`,
       price: 2,
-      status: Math.floor(Math.random()) ? true : false,
+      status: Boolean(Math.round(Math.random())),
     },
     {
       title: `Choose seats`,
       price: 9,
-      status: Math.floor(Math.random()) ? true : false,
+      status: Boolean(Math.round(Math.random())),
     },
   ].slice(Math.floor(Math.random() * 3))
 });

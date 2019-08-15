@@ -23,7 +23,7 @@ renderComponents(tripContentContainer, makeTripDays());
 
 const renderCards = () => {
   const tripDayContainer = document.querySelector(`.trip-events__list`);
-  renderComponents(tripDayContainer, makeCardCreate());
+  renderComponents(tripDayContainer, makeCardCreate(dataTasks[0]));
   dataTasks.forEach((task) => renderComponents(tripDayContainer, makeCard(task)));
 };
 
