@@ -13,9 +13,10 @@ const tripContainer = document.querySelector(`.trip-main__trip-info`);
 const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripContentContainer = document.querySelector(`.trip-events`);
 
-renderComponents(tripContainer, makeInfoTrip(
+const cities = new Set(dataTasks.map((task) => task.city));
 
-), `afterbegin`);
+
+renderComponents(tripContainer, makeInfoTrip(Array.from(cities)), `afterbegin`);
 renderComponents(tripControlsContainer, makeMenu());
 renderComponents(tripControlsContainer, makeFilters());
 renderComponents(tripContentContainer, makeSorting());

@@ -21,8 +21,9 @@ const makeData = () => ({
   photo: [`http://picsum.photos/300/150?r=${Math.random()}`,
     `http://picsum.photos/300/150?r=${Math.random()}`,
     `http://picsum.photos/300/150?r=${Math.random()}`],
-  description: [`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna,
-   non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra.`],
+  description: [`Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+  Cras aliquet varius magna, non porta ligula feugiat eget. 
+  Fusce tristique felis at fermentum pharetra.`],
   price: Math.floor(Math.random() * 400),
   time: {
     start: new Date(Math.floor(Math.random() * 24 / 100)).getHours(),
