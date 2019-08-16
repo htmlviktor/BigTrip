@@ -12,12 +12,12 @@ const makeData = () => ({
     `transport`,
     `trip`,
   ][Math.floor(Math.random() * 10)],
-  city: new Set([
+  city: [
     `Amsterdam`,
     `Wroclaw`,
     `Prague`,
     `Kiev`,
-  ]),
+  ][Math.floor(Math.random() * 4)],
   photo: [`http://picsum.photos/300/150?r=${Math.random()}`,
     `http://picsum.photos/300/150?r=${Math.random()}`,
     `http://picsum.photos/300/150?r=${Math.random()}`],
