@@ -7,7 +7,7 @@ import {makeSorting} from "./components/sorting";
 import {makeTripDays} from "./components/trip-days-container";
 
 import {renderComponents} from "./utils/utils";
-import {dataTasks} from "./data";
+import {dataTasks, dataFilters, dataMenu} from "./data";
 
 const tripContainer = document.querySelector(`.trip-main__trip-info`);
 const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
@@ -17,8 +17,8 @@ const cities = new Set(dataTasks.map((task) => task.city));
 
 
 renderComponents(tripContainer, makeInfoTrip(Array.from(cities)), `afterbegin`);
-renderComponents(tripControlsContainer, makeMenu());
-renderComponents(tripControlsContainer, makeFilters());
+renderComponents(tripControlsContainer, makeMenu(dataMenu));
+renderComponents(tripControlsContainer, makeFilters(dataFilters));
 renderComponents(tripContentContainer, makeSorting());
 
 renderComponents(tripContentContainer, makeTripDays());

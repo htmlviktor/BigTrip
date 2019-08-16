@@ -50,7 +50,7 @@ const makeData = () => ({
       price: 9,
       status: Boolean(Math.round(Math.random())),
     },
-  ].slice(Math.floor(Math.random() * 3))
+  ].slice(Math.floor(Math.random() * 3)),
 });
 
 const makeTasks = (count) => {
@@ -62,4 +62,16 @@ const makeTasks = (count) => {
 };
 
 export const dataTasks = makeTasks(4);
-console.log(dataTasks)
+
+export const dataFilters = [`everything`, `future`, `past`];
+export const dataMenu = [
+  {
+    title: `Table`,
+    status: true,
+  },
+  {
+    title: `Stats`,
+    status: false,
+  },
+];
+
