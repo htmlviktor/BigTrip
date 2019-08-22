@@ -1,4 +1,3 @@
-import {makeCard} from "./components/card";
 import {makeFilters} from "./components/filters";
 import {makeInfoTrip} from "./components/trip-info";
 import {makeMenu} from "./components/menu";
@@ -26,29 +25,49 @@ renderComponents(tripContentContainer, makeSorting());
 renderComponents(tripContentContainer, makeTripDays());
 
 
-const renderCards = () => {
+const renderCards = (data) => {
   const tripDayContainer = document.querySelector(`.trip-events__list`);
-  dataTasks.forEach((taskData) => {
+  if (data.length === 0) {
+    tripContentContainer.innerHTML = `<p class="trip-events__msg">Click New Event to create your first point</p>`;
+  }
+  data.forEach((taskData) => {
     const card = new Card(taskData);
     const cardEdit = new CardEdit(taskData);
-    renderTemplate(tripDayContainer, card.getElement(), Position.AFTER_END);
 
+    const replaceCard = () => {
+      tripDayContainer.replaceChild(card.getElement(), cardEdit.getElement());
+    };
+
+    const replaceCardEdit = () => {
+      tripDayContainer.replaceChild(cardEdit.getElement(), card.getElement());
+    };
+
+    const onCloseCard = (evt) => {
+      if (evt.key === `Escape`) {
+        replaceCard();
+        document.removeEventListener(`keydown`, onCloseCard);
+      }
+    };
+
+
+    renderTemplate(tripDayContainer, card.getElement(), Position.AFTER_END);
     card.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
-        tripDayContainer.replaceChild(cardEdit.getElement(), card.getElement());
+        replaceCardEdit();
+        document.addEventListener(`keydown`, onCloseCard);
       });
+
+
     cardEdit.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, () => {
-        tripDayContainer.replaceChild(card.getElement(), cardEdit.getElement());
-      });
+      .addEventListener(`click`, replaceCard);
+
     cardEdit.getElement().querySelector(`form`)
-      .addEventListener(`submit`, () => {
-        tripDayContainer.replaceChild(card.getElement(), cardEdit.getElement());
-      });
+      .addEventListener(`submit`, replaceCard);
+
   });
 };
 
 const priceElement = document.querySelector(`.trip-info__cost-value`);
 priceElement.textContent = dataTasks.map(({price}) => price).reduce((acc, cur) => acc + cur);
 
-renderCards(5);
+renderCards(dataTasks);
