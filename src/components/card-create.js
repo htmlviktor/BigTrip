@@ -1,5 +1,27 @@
-export const makeCardCreate = ({options, description, photo}) => {
-  return `<li class="trip-events__item">
+import {createElement} from "../utils/utils";
+
+export default class CardEdit {
+  constructor({options, description, photo, price}) {
+    this._options = options;
+    this._description = description;
+    this._photo = photo;
+    this._price = price;
+    this._element = null;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return `<li class="trip-events__item">
                   <form class="event  event--edit" action="#" method="post">
                     <header class="event__header">
                       <div class="event__type-wrapper">
@@ -99,7 +121,7 @@ export const makeCardCreate = ({options, description, photo}) => {
                           <span class="visually-hidden">Price</span>
                           €
                         </label>
-                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${this._price}">
                       </div>
 
                       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -124,7 +146,7 @@ export const makeCardCreate = ({options, description, photo}) => {
                         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                         <div class="event__available-offers">
-                        ${options.map(({title, price, status}, index) => {
+                        ${this._options.map(({title, price, status}, index) => {
     return `<div class="event__offer-selector">
                             <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" 
                             ${status ? `checked` : ``}>
@@ -142,12 +164,12 @@ export const makeCardCreate = ({options, description, photo}) => {
                       <section class="event__section  event__section--destination">
                         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                         <p class="event__destination-description">
-                       ${description}
+                       ${this._description}
                         </p>
 
                         <div class="event__photos-container">
                           <div class="event__photos-tape">
-                          ${photo.map((img) => {
+                          ${this._photo.map((img) => {
     return `<img class="event__photo" src="${img}" alt="Event photo">`;
   })}
                             
@@ -157,4 +179,7 @@ export const makeCardCreate = ({options, description, photo}) => {
                     </section>
                   </form>
                 </li>`;
-};
+  }
+}
+
+

@@ -26,8 +26,8 @@ const makeData = () => ({
   Fusce tristique felis at fermentum pharetra.`],
   price: Math.floor(Math.random() * 400),
   time: {
-    start: new Date(Math.floor(Math.random() * 24 / 100)).getHours(),
-    end: new Date(Math.floor(Math.random() * 24 / 100)).getHours() + 1,
+    start: new Date(Math.floor(Math.random() * 24)).getHours(),
+    end: new Date(Math.floor(Math.random() * 24 / 100)).getHours() + Math.floor(Math.random() * 4),
   },
   options: [
     {
