@@ -1,23 +1,11 @@
-import {createElement} from "../utils/utils";
+import AbstractComponent from "./abstract-component";
 
-export default class Card {
-  constructor({type, time: {start, end}, price}) {
+export default class Card extends AbstractComponent{
+  constructor({type, date, price}) {
+    super();
     this._type = type;
-    this._time = {start, end};
+    this._date = date;
     this._price = price;
-
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getTemplate() {
@@ -30,9 +18,9 @@ export default class Card {
 
                     <div class="event__schedule">
                       <p class="event__time">
-                        <time class="event__start-time" datetime="2019-03-18T10:30">${this._time.start}:00</time>
+                        <time class="event__start-time" datetime="2019-03-18T10:30">${new Date(this._date).getHours()}:00</time>
                         —
-                        <time class="event__end-time" datetime="2019-03-18T11:00">${this._time.end}:00</time>
+                        <time class="event__end-time" datetime="2019-03-18T11:00">${new Date(this._date).getHours() + 1}:00</time>
                       </p>
                       <p class="event__duration">1H 30M</p>
                     </div>

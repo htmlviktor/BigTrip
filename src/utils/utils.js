@@ -1,7 +1,3 @@
-export const renderComponents = (container, node, position = `beforeend`) => {
-  container.insertAdjacentHTML(position, node);
-};
-
 export const createElement = (template) => {
   const element = document.createElement(`div`);
   element.innerHTML = template;
@@ -13,7 +9,7 @@ export const Position = {
   AFTER_END: `afterend`
 }
 
-export const renderTemplate = (container, element, position) => {
+export const render = (container, element, position) => {
   switch (position) {
     case `afterend`:
       container.append(element);

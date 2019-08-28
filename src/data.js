@@ -25,10 +25,7 @@ const makeData = () => ({
   Cras aliquet varius magna, non porta ligula feugiat eget. 
   Fusce tristique felis at fermentum pharetra.`],
   price: Math.floor(Math.random() * 400),
-  time: {
-    start: new Date(Math.floor(Math.random() * 24)).getHours(),
-    end: new Date(Math.floor(Math.random() * 24 / 100)).getHours() + Math.floor(Math.random() * 4),
-  },
+  date: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000,
   options: [
     {
       title: `Add luggage`,
@@ -53,15 +50,9 @@ const makeData = () => ({
   ].slice(Math.floor(Math.random() * 3)),
 });
 
-const makeTasks = (count) => {
-  const array = new Array();
-  for (let i = 0; i < count; i++) {
-    array[i] = makeData();
-  }
-  return array;
-};
 
-export const dataTasks = makeTasks(4);
+export const data = new Array(10).fill(``).map(makeData);
+
 
 export const dataFilters = [`everything`, `future`, `past`];
 export const dataMenu = [
@@ -75,3 +66,5 @@ export const dataMenu = [
   },
 ];
 
+export const cities = Array.from(new Set(data.map((task) => task.city)));
+export const dates = Array.from(new Set(data.map((it) => it.date)));

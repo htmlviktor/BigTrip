@@ -1,19 +1,12 @@
-import {createElement} from "../utils/utils";
+import AbstractComponent from "./abstract-component";
 
-export default class CardEdit {
+export default class CardEdit extends AbstractComponent{
   constructor({options, description, photo, price}) {
+    super();
     this._options = options;
     this._description = description;
     this._photo = photo;
     this._price = price;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   removeElement() {
