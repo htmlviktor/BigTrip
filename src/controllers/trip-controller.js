@@ -2,7 +2,7 @@ import AbstractComponent from "../components/abstract-component";
 import Day from "../components/day";
 import {render, Position} from "../utils/utils";
 import PointController from "./point-controller";
-
+import Sort from "../components/sorting";
 
 export default class TripController extends AbstractComponent {
   constructor(container, data, dates) {
@@ -11,9 +11,11 @@ export default class TripController extends AbstractComponent {
     this._data = data;
     this._dates = dates;
     this._day = new Day(dates);
+    this._sort = new Sort();
   }
 
   init() {
+    render(this._container, this._sort.getElement(), Position.BEFORE_END);
     render(this._container, this._day.getElement(), Position.BEFORE_END);
     this.renderCards();
   }
@@ -29,6 +31,6 @@ export default class TripController extends AbstractComponent {
   }
 
   onDateChange(data) {
-    console.log(this._data);
+
   }
 }
