@@ -1,12 +1,14 @@
 import AbstractComponent from "./abstract-component";
 
 export default class CardEdit extends AbstractComponent{
-  constructor({options, description, photo, price}) {
+  constructor({options, description, photo, price, type, city}) {
     super();
     this._options = options;
     this._description = description;
     this._photo = photo;
     this._price = price;
+    this._type = type;
+    this._city = city;
   }
 
   removeElement() {
@@ -20,7 +22,7 @@ export default class CardEdit extends AbstractComponent{
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._type}.png" alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -141,15 +143,15 @@ export default class CardEdit extends AbstractComponent{
                         <div class="event__available-offers">
                         ${this._options.map(({title, price, status}, index) => {
     return `<div class="event__offer-selector">
-                            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" 
-                            ${status ? `checked` : ``}>
+                            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="add-option" 
+                            ${status ? `checked` : ``} value="${title}">
                             <label class="event__offer-label" for="event-offer-luggage-${index}">
                               <span class="event__offer-title">${title}</span>
                               +
                               €&nbsp;<span class="event__offer-price">${price}</span>
                             </label>
                           </div>`;
-  })}
+  }).join(``)}
                           
                         </div>
                       </section>

@@ -13,6 +13,10 @@ export default class TripController extends AbstractComponent {
     this._dates = dates;
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
+
+    this._subscriptions = [];
+    this.onChangeView = this.onChangeView.bind(this);
+    this.onChangeData = this.onChangeData.bind(this);
   }
 
   init() {
@@ -20,9 +24,7 @@ export default class TripController extends AbstractComponent {
     render(this._container, this._daysContainer.getElement(), Position.AFTER_END);
     this.renderDays();
 
-    this._sort.getElement().addEventListener(`change`, (evt) => {
-      this.onSort(evt.target.dataset.sort);
-    });
+    this._sort.getElement().addEventListener(`change`, this.onSort.bind(this));
   }
 
   renderDays() {
@@ -36,20 +38,24 @@ export default class TripController extends AbstractComponent {
   }
 
   renderCards(container, data) {
-    data.forEach((card) => new PointController(container, card));
+    data.forEach((card) => {
+      const pointController = new PointController(container, card, this.onChangeData, this.onChangeView);
+      this._subscriptions.push(pointController.setDefaultView.bind(pointController));
+    });
+
   }
 
-  onSort(type) {
+  onSort() {
     this._daysContainer.getElement().innerHTML = ``;
     const day = new Day();
     render(this._daysContainer.getElement(), day.getElement(), Position.BEFORE_END);
-    switch (type) {
+    switch (this._sort.getElement().querySelector(`.trip-sort__input:checked`).dataset.sort) {
       case `time`:
         const sortByTime = [...this._data.sort()];
         this.renderCards(day.getElement().querySelector(`.trip-events__list`), sortByTime);
         break;
       case `price`:
-        const sortByPrice = [...this._data.sort((a, b) => a.price < b.price)];
+        const sortByPrice = [...this._data.sort((a, b) => b.price - a.price)];
         this.renderCards(day.getElement().querySelector(`.trip-events__list`), sortByPrice);
         break;
       default:
@@ -57,4 +63,11 @@ export default class TripController extends AbstractComponent {
     }
   }
 
+  onChangeData(oldData, newData) {
+    this._data[this._data.findIndex((it) => it === oldData)] = newData;
+    this.onSort();
+  }
+  onChangeView() {
+    this._subscriptions.forEach((subscription) => subscription());
+  }
 }

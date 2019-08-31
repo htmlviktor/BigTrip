@@ -1,11 +1,22 @@
 import AbstractComponent from "./abstract-component";
 
 export default class Card extends AbstractComponent{
-  constructor({type, date, price}) {
+  constructor({type, date, price, options}) {
     super();
     this._type = type;
     this._date = date;
     this._price = price;
+    this._options = options;
+  }
+
+  optionsView(options) {
+    return options.map((option) => {
+      return option.status ? `<li class="event__offer">
+                        <span class="event__offer-title">${option.title}</span>
+                        +
+                        €&nbsp;<span class="event__offer-price">${option.price}</span>
+                       </li>` : ``;
+    }).join(``);
   }
 
   getTemplate() {
@@ -14,7 +25,7 @@ export default class Card extends AbstractComponent{
                     <div class="event__type">
                       <img class="event__type-icon" width="42" height="42" src="img/icons/${this._type}.png" alt="Event type icon">
                     </div>
-                    <h3 class="event__title">Title for this</h3>
+                    <h3 class="event__title">${this._type}</h3>
 
                     <div class="event__schedule">
                       <p class="event__time">
@@ -31,11 +42,7 @@ export default class Card extends AbstractComponent{
 
                     <h4 class="visually-hidden">Offers:</h4>
                     <ul class="event__selected-offers">
-                      <li class="event__offer">
-                        <span class="event__offer-title">Order Uber</span>
-                        +
-                        €&nbsp;<span class="event__offer-price">20</span>
-                       </li>
+                      ${this.optionsView(this._options)}
                     </ul>
 
                     <button class="event__rollup-btn" type="button">
