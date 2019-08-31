@@ -25,10 +25,10 @@ export default class PointController extends AbstractComponent {
     render(this._container, this._card.getElement(), Position.AFTER_END);
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
-      altInput: true,
-      allowInput: true,
+      // altInput: true,
+      // allowInput: true,
       enableTime: true,
-      dateFormat: "Y-m-d H:i",
+      dateFormat: "y-m-d H:i",
       defaultDate: this._data.date,
     });
     card.querySelector(`.event__rollup-btn`)
