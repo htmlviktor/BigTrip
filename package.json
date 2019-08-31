@@ -18,6 +18,7 @@
     "node": "10"
   },
   "dependencies": {
+    "flatpickr": "4.6.2",
     "webpack": "4.39.1",
     "webpack-cli": "3.3.6"
   }
