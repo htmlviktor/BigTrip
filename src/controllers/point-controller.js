@@ -2,6 +2,10 @@ import AbstractComponent from "../components/abstract-component";
 import {render, Position} from "../utils/utils";
 import Card from "../components/card";
 import CardEdit from "../components/card-edit";
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 export default class PointController extends AbstractComponent {
   constructor(container, data, onDataChange, onChangeView) {
@@ -20,6 +24,13 @@ export default class PointController extends AbstractComponent {
     const cardEdit = this._cardEdit.getElement();
     render(this._container, this._card.getElement(), Position.AFTER_END);
 
+    flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
+      // altInput: true,
+      // allowInput: true,
+      enableTime: true,
+      dateFormat: "y-m-d H:i",
+      defaultDate: this._data.date,
+    });
     card.querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
         this.onChangeView();
