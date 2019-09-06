@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const makeData = () => ({
   type: [
     `bus`,
@@ -25,7 +27,7 @@ const makeData = () => ({
   Cras aliquet varius magna, non porta ligula feugiat eget. 
   Fusce tristique felis at fermentum pharetra.`],
   price: Math.floor(Math.random() * 400),
-  date: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000,
+  date: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000, `x`).format(`DD.MM.YY`),
   options: [
     {
       title: `Add luggage`,
@@ -51,7 +53,7 @@ const makeData = () => ({
 });
 
 
-export const data = new Array(4).fill(``).map(makeData);
+export const data = new Array(10).fill(``).map(makeData);
 
 
 export const dataFilters = [`everything`, `future`, `past`];
@@ -67,4 +69,4 @@ export const dataMenu = [
 ];
 
 export const cities = Array.from(new Set(data.map((task) => task.city)));
-export const dates = data.map((it) => new Date(it.date).toDateString());
+export const dates = data.map((it) => it.date);

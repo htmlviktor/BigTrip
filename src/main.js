@@ -25,7 +25,7 @@ const addButton = document.querySelector(`.trip-main__event-add-btn`);
 
 
 
-const tripController = new TripController(tripEvents, data, dates);
+const tripController = new TripController(tripEvents, data);
 tripController.init();
 
 addButton.addEventListener(`click`, () => {
@@ -37,9 +37,11 @@ navigation.addEventListener(`click`, (evt) => {
     case `Stats`:
       evt.preventDefault();
       tripController.hide();
+      stats.show();
       break;
     case `Table`:
       evt.preventDefault();
+      stats.hide();
       tripController.show();
       break;
   }

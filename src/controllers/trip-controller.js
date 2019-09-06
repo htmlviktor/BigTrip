@@ -6,14 +6,12 @@ import Sort from "../components/sorting";
 import DaysContainer from "../components/days-container";
 import AddEvent from "../components/add-event";
 import flatpickr from "flatpickr";
-import moment from "moment";
 
 export default class TripController extends AbstractComponent {
-  constructor(container, data, dates) {
+  constructor(container, data) {
     super();
     this._container = container;
     this._data = data;
-    this._dates = new Set(dates);
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
     this._addEvent = new AddEvent();
@@ -21,38 +19,41 @@ export default class TripController extends AbstractComponent {
     this._subscriptions = [];
     this.onChangeView = this.onChangeView.bind(this);
     this.onChangeData = this.onChangeData.bind(this);
+
+    this.onAddEvent = this.onAddEvent.bind(this);
+  }
+
+  onAddEvent(evt) {
+    evt.preventDefault();
+    const entry = new FormData(this._addEvent.getElement());
+
+    const obj = {
+      type: entry.get(`event-type`),
+      city: entry.get(`event-destination`),
+      date: entry.get(`event-start-time`),
+      price: entry.get(`event-price`),
+      options: [],
+      description: [],
+      photo: []
+    };
+    this.onChangeData(null, obj);
+    this._addEvent.getElement().removeEventListener(`submit`, this.onAddEvent);
+    this._addEvent.getElement().remove();
   }
 
   addEvent() {
     render(this._container, this._addEvent.getElement(), Position.BEFORE_END);
     flatpickr(this._addEvent.getElement().querySelectorAll(`.event__input--time`), {
-      altInput: true,
-      allowInput: true,
-      ariaDateFormat: `y-m-d H:i`,
-      dateFormat: `U`,
+      // altInput: true,
+      // allowInput: true,
+      dateFormat: `d.m.y`,
       defaultDate: Date.now(),
     });
     this._addEvent.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, () => {
         this._addEvent.getElement().remove();
       });
-    this._addEvent.getElement().addEventListener(`submit`, (evt) => {
-      evt.preventDefault();
-      const entry = new FormData(this._addEvent.getElement());
-      const entryDate = Number(entry.get(`event-start-time`));
-
-      const obj = {
-        type: entry.get(`event-type`),
-        city: entry.get(`event-destination`),
-        date: entryDate,
-        price: entry.get(`event-price`),
-        options: [],
-        description: [],
-        photo: []
-      };
-      this._dates.add(entryDate);
-      this.onChangeData(null, obj);
-    });
+    this._addEvent.getElement().addEventListener(`submit`, this.onAddEvent);
   }
 
   init() {
@@ -73,17 +74,16 @@ export default class TripController extends AbstractComponent {
 
 
   renderDays() {
-    const truData = Array.from(this._dates).filter((date) => {
-      return this._data.some((it) => {
-        return new Date(it.date).toDateString() === new Date(date).toDateString();
-      });
+    const dates = Array.from(new Set(this._data.map((it) => it.date)));
+    const truData = dates.filter((date) => {
+      return this._data.some((it) => it.date === date);
     });
-    truData.forEach((date, index) => {
+    truData.sort().forEach((date, index) => {
       const day = new Day(date, index);
       render(this._daysContainer.getElement(), day.getElement(), Position.AFTER_END);
       this.renderCards(
           day.getElement().querySelector(`.trip-events__list`),
-          this._data.filter((it) => new Date(it.date).toDateString() === date));
+          this._data.filter((it) => it.date === date));
     });
   }
 

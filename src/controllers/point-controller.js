@@ -34,7 +34,7 @@ export default class PointController extends AbstractComponent {
       // altInput: true,
       // allowInput: true,
       enableTime: true,
-      dateFormat: "y-m-d H:i",
+      dateFormat: "d.m.y",
       defaultDate: this._data.date,
     });
     card.querySelector(`.event__rollup-btn`)
@@ -55,6 +55,7 @@ export default class PointController extends AbstractComponent {
           price: entry.get(`event-price`),
           options: this.reloadOptions(entry.getAll(`add-option`)),
           type: entry.get(`event-type`),
+          date: entry.get(`event-start-time`),
         });
         this.onDataChange(this._data, obj);
       });
