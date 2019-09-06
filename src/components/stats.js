@@ -2,8 +2,9 @@ import AbstractComponent from "./abstract-component";
 import Chart from'chart.js';
 
 export default class Stats extends AbstractComponent {
-  constructor() {
+  constructor(data) {
     super();
+    this._data = data;
   }
 
   hide() {
@@ -12,6 +13,14 @@ export default class Stats extends AbstractComponent {
 
   show() {
     this._element.classList.remove(`visually-hidden`);
+  }
+
+  chartMoney() {
+    const ctx = this._element.querySelector(`.statistics__chart--money`);
+    const barMoneyChart = new Chart(ctx, {
+      type: `horizontalBar`,
+      data: this._data,
+    });
   }
 
   getTemplate() {

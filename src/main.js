@@ -14,7 +14,9 @@ const routeContainer = document.querySelector(`.route__container`);
 const infoTrip = new InfoTrip(cities, dates);
 const menu = new Menu(dataMenu);
 const filter = new Filter(dataFilters);
-const stats = new Stats();
+const stats = new Stats(data);
+
+
 
 render(tripContainer, infoTrip.getElement(), Position.BEFORE_END);
 render(menuContainer, menu.getElement(), Position.BEFORE_END);
@@ -22,7 +24,6 @@ render(menuContainer, filter.getElement(), Position.AFTER_END);
 
 const navigation = document.querySelector(`.trip-controls__trip-tabs`);
 const addButton = document.querySelector(`.trip-main__event-add-btn`);
-
 
 
 const tripController = new TripController(tripEvents, data);
@@ -52,4 +53,5 @@ const priceElement = document.querySelector(`.trip-info__cost-value`);
 priceElement.textContent = data.map(({price}) => price).reduce((acc, cur) => acc + cur);
 
 render(routeContainer, stats.getElement(), Position.AFTER_END);
+stats.chartMoney();
 
