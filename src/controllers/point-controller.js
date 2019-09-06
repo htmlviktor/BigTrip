@@ -6,6 +6,7 @@ import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
+import AddEvent from "../components/add-event";
 
 export default class PointController extends AbstractComponent {
   constructor(container, data, onDataChange, onChangeView) {
@@ -19,10 +20,16 @@ export default class PointController extends AbstractComponent {
     this.create();
   }
 
+
   create() {
     const card = this._card.getElement();
     const cardEdit = this._cardEdit.getElement();
     render(this._container, this._card.getElement(), Position.AFTER_END);
+
+    cardEdit.querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, () => {
+        this.onDataChange(this._data, null);
+      });
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
       // altInput: true,

@@ -4,6 +4,7 @@ import {render, Position} from "../utils/utils";
 import PointController from "./point-controller";
 import Sort from "../components/sorting";
 import DaysContainer from "../components/days-container";
+import AddEvent from "../components/add-event";
 
 export default class TripController extends AbstractComponent {
   constructor(container, data, dates) {
@@ -13,10 +14,23 @@ export default class TripController extends AbstractComponent {
     this._dates = dates;
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
+    this._addEvent = new AddEvent();
 
     this._subscriptions = [];
     this.onChangeView = this.onChangeView.bind(this);
     this.onChangeData = this.onChangeData.bind(this);
+  }
+
+  addEvent() {
+    render(this._container, this._addEvent.getElement(), Position.BEFORE_END);
+    this._addEvent.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, () => {
+        this._addEvent.getElement().remove();
+      });
+    this._addEvent.getElement().addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+
+    });
   }
 
   init() {
@@ -27,8 +41,20 @@ export default class TripController extends AbstractComponent {
     this._sort.getElement().addEventListener(`change`, this.onSort.bind(this));
   }
 
+  show() {
+    this._container.classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._container.classList.add(`visually-hidden`);
+  }
+
+
   renderDays() {
-    this._dates.forEach((date, index) => {
+    const truData = this._dates.filter((date) => {
+      return this._data.some((it) => it.date === date);
+    });
+    truData.forEach((date, index) => {
       const day = new Day(date, index);
       render(this._daysContainer.getElement(), day.getElement(), Position.AFTER_END);
       this.renderCards(
@@ -64,9 +90,20 @@ export default class TripController extends AbstractComponent {
   }
 
   onChangeData(oldData, newData) {
-    this._data[this._data.findIndex((it) => it === oldData)] = newData;
-    this.onSort();
+    const index = this._data.findIndex((it) => it === oldData);
+    if (newData === null) {
+      this._data = [...this._data.slice(0, index), ...this._data.slice(index + 1)];
+      this.onSort();
+    } else if (oldData === null) {
+      this._data = [newData, this._data.slice()];
+      this.onSort();
+    } else {
+      this._data[index] = newData;
+      this.onSort();
+    }
+
   }
+
   onChangeView() {
     this._subscriptions.forEach((subscription) => subscription());
   }

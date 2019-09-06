@@ -51,7 +51,7 @@ const makeData = () => ({
 });
 
 
-export const data = new Array(10).fill(``).map(makeData);
+export const data = new Array(4).fill(``).map(makeData);
 
 
 export const dataFilters = [`everything`, `future`, `past`];
