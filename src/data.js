@@ -67,4 +67,4 @@ export const dataMenu = [
 ];
 
 export const cities = Array.from(new Set(data.map((task) => task.city)));
-export const dates = Array.from(new Set(data.map((it) => it.date)));
+export const dates = data.map((it) => new Date(it.date).toDateString());
