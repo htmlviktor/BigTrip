@@ -6,6 +6,11 @@ import Stats from "./components/stats";
 import Menu from "./components/menu";
 import Filter from "./components/filter";
 import TripController from "./controllers/trip-controller";
+import API from "./api/api";
+
+const api = new API();
+
+
 
 const tripEvents = document.querySelector(`.trip-events`);
 const tripContainer = document.querySelector(`.trip-info`);
