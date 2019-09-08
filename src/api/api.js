@@ -1,3 +1,5 @@
+import ModelPoint from "./model-adapter";
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -25,7 +27,8 @@ export default class API {
 
   getPoints() {
     return this._load({url: `points`})
-      .then(toJSON);
+      .then(toJSON)
+      .then(ModelPoint.parsePoints);
   };
 
 

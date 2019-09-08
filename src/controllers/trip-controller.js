@@ -56,10 +56,10 @@ export default class TripController extends AbstractComponent {
     this._addEvent.getElement().addEventListener(`submit`, this.onAddEvent);
   }
 
-  init() {
+  init(data) {
     render(this._container, this._sort.getElement(), Position.BEFORE_END);
     render(this._container, this._daysContainer.getElement(), Position.AFTER_END);
-    this.renderDays();
+    this.renderDays(data);
 
     this._sort.getElement().addEventListener(`change`, this.onSort.bind(this));
   }
@@ -73,17 +73,18 @@ export default class TripController extends AbstractComponent {
   }
 
 
-  renderDays() {
-    const dates = Array.from(new Set(this._data.map((it) => it.date)));
+  renderDays(points) {
+    console.log(points)
+    const dates = Array.from(new Set(points.map((it) => it.date)));
     const truData = dates.filter((date) => {
-      return this._data.some((it) => it.date === date);
+      return points.some((it) => it.date === date);
     });
     truData.sort().forEach((date, index) => {
       const day = new Day(date, index);
       render(this._daysContainer.getElement(), day.getElement(), Position.AFTER_END);
       this.renderCards(
           day.getElement().querySelector(`.trip-events__list`),
-          this._data.filter((it) => it.date === date));
+          points.filter((it) => it.date === date));
     });
   }
 

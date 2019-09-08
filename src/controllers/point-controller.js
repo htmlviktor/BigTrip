@@ -35,7 +35,7 @@ export default class PointController extends AbstractComponent {
       // allowInput: true,
       enableTime: true,
       dateFormat: "d.m.y",
-      defaultDate: this._data.date,
+      defaultDate: Date.now(),
     });
     card.querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {

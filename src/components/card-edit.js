@@ -1,14 +1,12 @@
 import AbstractComponent from "./abstract-component";
 
 export default class CardEdit extends AbstractComponent{
-  constructor({options, description, photo, price, type, city}) {
+  constructor({offers, destination, price, type}) {
     super();
-    this._options = options;
-    this._description = description;
-    this._photo = photo;
+    this._options = offers;
     this._price = price;
     this._type = type;
-    this._city = city;
+    this._destination = destination;
   }
 
   removeElement() {
@@ -164,7 +162,7 @@ export default class CardEdit extends AbstractComponent{
 
                         <div class="event__photos-container">
                           <div class="event__photos-tape">
-                          ${this._photo.map((img) => {
+                          ${this._destination.pictures.map((img) => {
     return `<img class="event__photo" src="${img}" alt="Event photo">`;
   })}
                             
