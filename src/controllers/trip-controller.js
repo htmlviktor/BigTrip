@@ -6,12 +6,14 @@ import Sort from "../components/sorting";
 import DaysContainer from "../components/days-container";
 import AddEvent from "../components/add-event";
 import flatpickr from "flatpickr";
+import moment from "moment";
 
 export default class TripController extends AbstractComponent {
-  constructor(container, data) {
+  constructor(container, model) {
     super();
     this._container = container;
-    this._data = data;
+    this.model = model;
+    this._data = null;
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
     this._addEvent = new AddEvent();
@@ -44,8 +46,6 @@ export default class TripController extends AbstractComponent {
   addEvent() {
     render(this._container, this._addEvent.getElement(), Position.BEFORE_END);
     flatpickr(this._addEvent.getElement().querySelectorAll(`.event__input--time`), {
-      // altInput: true,
-      // allowInput: true,
       dateFormat: `d.m.y`,
       defaultDate: Date.now(),
     });
@@ -56,11 +56,10 @@ export default class TripController extends AbstractComponent {
     this._addEvent.getElement().addEventListener(`submit`, this.onAddEvent);
   }
 
-  init(data) {
+  init() {
     render(this._container, this._sort.getElement(), Position.BEFORE_END);
     render(this._container, this._daysContainer.getElement(), Position.AFTER_END);
-    this.renderDays(data);
-
+    this.model.getPoints().then((res) => this.renderDays(res));
     this._sort.getElement().addEventListener(`change`, this.onSort.bind(this));
   }
 
@@ -74,17 +73,13 @@ export default class TripController extends AbstractComponent {
 
 
   renderDays(points) {
-    console.log(points)
-    const dates = Array.from(new Set(points.map((it) => it.date)));
-    const truData = dates.filter((date) => {
-      return points.some((it) => it.date === date);
-    });
-    truData.sort().forEach((date, index) => {
+    const dates = Array.from(new Set(points.map((it) => moment(it.date.from).format(`DD MMM`))));
+    dates.sort().forEach((date, index) => {
       const day = new Day(date, index);
       render(this._daysContainer.getElement(), day.getElement(), Position.AFTER_END);
       this.renderCards(
           day.getElement().querySelector(`.trip-events__list`),
-          points.filter((it) => it.date === date));
+          points.filter((it) => moment(it.date.from).format(`DD MMM`) === date));
     });
   }
 
@@ -93,7 +88,6 @@ export default class TripController extends AbstractComponent {
       const pointController = new PointController(container, card, this.onChangeData, this.onChangeView);
       this._subscriptions.push(pointController.setDefaultView.bind(pointController));
     });
-
   }
 
   onSort() {
@@ -110,7 +104,7 @@ export default class TripController extends AbstractComponent {
         this.renderCards(day.getElement().querySelector(`.trip-events__list`), sortByPrice);
         break;
       default:
-        this.renderDays();
+        this.renderDays(this._data);
     }
   }
 

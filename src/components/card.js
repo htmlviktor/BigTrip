@@ -39,7 +39,7 @@ export default class Card extends AbstractComponent{
                     </div>
 
                     <p class="event__price">
-                      €&nbsp;<span class="event__price-value">${this._destination.basePrice}</span>
+                      €&nbsp;<span class="event__price-value">${this._price}</span>
                     </p>
 
                     <h4 class="visually-hidden">Offers:</h4>

@@ -22,7 +22,7 @@ const toJSON = (response) => {
 export default class API {
   constructor() {
     this._baseUrl = `https://htmlacademy-es-9.appspot.com/big-trip/`;
-    this._token = `Basic ${Math.random()}}`;
+    this._token = `Basic eo0w5153k29889a`;
   };
 
   getPoints() {
@@ -30,6 +30,16 @@ export default class API {
       .then(toJSON)
       .then(ModelPoint.parsePoints);
   };
+
+  getDestinations() {
+    return this._load({url: `destinations`})
+      .then(toJSON);
+  }
+
+  getOffers() {
+    return this._load({url: `offers`})
+      .then(toJSON);
+  }
 
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

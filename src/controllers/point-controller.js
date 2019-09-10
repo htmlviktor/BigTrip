@@ -31,8 +31,6 @@ export default class PointController extends AbstractComponent {
       });
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
-      // altInput: true,
-      // allowInput: true,
       enableTime: true,
       dateFormat: "d.m.y",
       defaultDate: Date.now(),
@@ -53,7 +51,7 @@ export default class PointController extends AbstractComponent {
 
         const obj = Object.assign({}, this._data, {
           price: entry.get(`event-price`),
-          options: this.reloadOptions(entry.getAll(`add-option`)),
+          offers: this.reloadOptions(entry.getAll(`add-option`)),
           type: entry.get(`event-type`),
           date: entry.get(`event-start-time`),
         });
@@ -80,7 +78,8 @@ export default class PointController extends AbstractComponent {
   }
 
   reloadOptions(entry) {
-    const arr = this._data.options.map((it) => Object.assign({}, it));
+    console.log(this._data)
+    const arr = this._data.offers.map((it) => Object.assign({}, it));
     arr.forEach((it) => it.status = false);
     entry.forEach((name) => arr.find((it) => it.title === name).status = true);
     return arr;
