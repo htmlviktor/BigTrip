@@ -85,7 +85,7 @@ export default class TripController extends AbstractComponent {
 
   renderCards(container, data) {
     data.forEach((card) => {
-      const pointController = new PointController(container, card, this.onChangeData, this.onChangeView);
+      const pointController = new PointController(container, this.model, card, this.onChangeData, this.onChangeView);
       this._subscriptions.push(pointController.setDefaultView.bind(pointController));
     });
   }

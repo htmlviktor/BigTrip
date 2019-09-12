@@ -8,8 +8,9 @@ import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
 
 export default class PointController extends AbstractComponent {
-  constructor(container, data, onDataChange, onChangeView) {
+  constructor(container, model, data, onDataChange, onChangeView) {
     super();
+    this.model = model;
     this._container = container;
     this._data = data;
     this._card = new Card(data);
@@ -24,6 +25,7 @@ export default class PointController extends AbstractComponent {
     const card = this._card.getElement();
     const cardEdit = this._cardEdit.getElement();
     render(this._container, this._card.getElement(), Position.AFTER_END);
+
 
     cardEdit.querySelector(`.event__reset-btn`)
       .addEventListener(`click`, () => {
