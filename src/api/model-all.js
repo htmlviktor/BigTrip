@@ -36,7 +36,6 @@ export default class Model {
   getPoints() {
     return api.getPoints().then((res) => {
       this.points = res;
-      return res;
     });
   }
   getDestinations() {

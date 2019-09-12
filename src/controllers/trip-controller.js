@@ -9,10 +9,9 @@ import flatpickr from "flatpickr";
 import moment from "moment";
 
 export default class TripController extends AbstractComponent {
-  constructor(container, model) {
+  constructor(container) {
     super();
     this._container = container;
-    this.model = model;
     this._data = null;
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
@@ -59,7 +58,6 @@ export default class TripController extends AbstractComponent {
   init() {
     render(this._container, this._sort.getElement(), Position.BEFORE_END);
     render(this._container, this._daysContainer.getElement(), Position.AFTER_END);
-    this.model.getPoints().then((res) => this.renderDays(res));
     this._sort.getElement().addEventListener(`change`, this.onSort.bind(this));
   }
 
@@ -73,13 +71,13 @@ export default class TripController extends AbstractComponent {
 
 
   renderDays(points) {
-    const dates = Array.from(new Set(points.map((it) => moment(it.date.from).format(`DD MMM`))));
+    const dates = Array.from(new Set(points.map((it) => moment(it.date.from).format(`MMM DD`))));
     dates.sort().forEach((date, index) => {
       const day = new Day(date, index);
       render(this._daysContainer.getElement(), day.getElement(), Position.AFTER_END);
       this.renderCards(
           day.getElement().querySelector(`.trip-events__list`),
-          points.filter((it) => moment(it.date.from).format(`DD MMM`) === date));
+          points.filter((it) => moment(it.date.from).format(`MMM DD`) === date));
     });
   }
 

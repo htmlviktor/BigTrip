@@ -5,7 +5,6 @@ import Stats from "./components/stats";
 import Menu from "./components/menu";
 import Filter from "./components/filter";
 import TripController from "./controllers/trip-controller";
-import API from "./api/api";
 import Model from "./api/model-all";
 
 const tripEvents = document.querySelector(`.trip-events`);
@@ -19,22 +18,15 @@ render(menuContainer, new Menu(dataMenu).getElement(), Position.BEFORE_END);
 render(menuContainer, new Filter(dataFilters).getElement(), Position.AFTER_END);
 
 const model = new Model();
-const tripController = new TripController(tripEvents, model);
-
-tripController.init();
-
-
-
-
-//
-// Promise.all([
-//   api.getPoints(),
-//   api.getDestinations(),
-//   api.getOffers()]).then((data) => {
-//   const model = new Model(data[0], data[1], data[2]);
-//   tripController.init(model.points);
-// });
-
+const tripController = new TripController(tripEvents);
+Promise.all([
+  model.getOffers(),
+  model.getPoints(),
+  model.getDestinations()
+]).then(() => {
+  tripController.init();
+  tripController.renderDays(model.points);
+});
 
 
 const navigation = document.querySelector(`.trip-controls__trip-tabs`);
