@@ -33,6 +33,10 @@ export default class Model {
     this._offers = offers;
   }
 
+  updatePoint(data) {
+    return api.updatePoint()
+  }
+
   getPoints() {
     return api.getPoints().then((res) => {
       this.points = res;

@@ -50,41 +50,17 @@ export default class PointController extends AbstractComponent {
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
         const entry = new FormData(cardEdit.querySelector(`form`));
-
         const obj = Object.assign({}, this._data, {
           price: entry.get(`event-price`),
-          offers: this.reloadOptions(entry.getAll(`add-option`)),
+          offers: [],
           type: entry.get(`event-type`),
           date: entry.get(`event-start-time`),
+          destination: entry.get(`event-destination`)
         });
         this.onDataChange(this._data, obj);
       });
-    cardEdit.querySelector(`.event__type-list`)
-      .addEventListener(`change`, this.changeType.bind(this));
   };
 
-  changeType(evt) {
-    const label = this._cardEdit.getElement().querySelector(`.event__label`);
-    const image = this._cardEdit.getElement().querySelector(`.event__type > img`);
-    const value = evt.target.value;
-    switch (evt.target.parentNode.parentNode.querySelector(`legend`).textContent) {
-      case `Transfer`:
-        label.textContent = `${value} to `;
-        image.src = `img/icons/${value}.png`;
-        break;
-      case `Activity`:
-        label.textContent = `${value} in `;
-        image.src = `img/icons/${value}.png`;
-        break;
-    }
-  }
-
-  reloadOptions(entry) {
-    const arr = this._data.offers.map((it) => Object.assign({}, it));
-    arr.forEach((it) => it.status = false);
-    entry.forEach((name) => arr.find((it) => it.title === name).status = true);
-    return arr;
-  }
 
   setDefaultView() {
     if (this._container.contains(this._cardEdit.getElement())) {

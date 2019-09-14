@@ -107,18 +107,7 @@ export default class TripController extends AbstractComponent {
   }
 
   onChangeData(oldData, newData) {
-    const index = this._data.findIndex((it) => it === oldData);
-    if (newData === null) {
-      this._data = [...this._data.slice(0, index), ...this._data.slice(index + 1)];
-      this.onSort();
-    } else if (oldData === null) {
-      this._data = [newData, ...this._data.slice()];
-      this.onSort();
-    } else {
-      this._data[index] = newData;
-      this.onSort();
-    }
-
+    console.log(newData)
   }
 
   onChangeView() {

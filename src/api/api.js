@@ -1,4 +1,5 @@
 import ModelPoint from "./model-adapter";
+import Model from "./model-all";
 
 const Method = {
   GET: `GET`,
@@ -41,6 +42,13 @@ export default class API {
       .then(toJSON);
   }
 
+  updatePoint({id, data}) {
+    return this._load({
+      url: `points/${id}`,
+      method: Method.PUT,
+      body: JSON.stringify(data),
+    }).then(toJSON).then(ModelPoint.parsePoint);
+  }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._token);
