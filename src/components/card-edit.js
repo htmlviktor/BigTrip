@@ -8,21 +8,63 @@ export default class CardEdit extends AbstractComponent {
     this._offers = model.offers;
     this._destinations = model.destinations;
 
-    this.bind();
-
     this.state = {
-      destination: this._destinations.find((el) => el.name === this.getElement().querySelector(`.event__input--destination`).value),
-      offers: null,
+      type: data.type,
+      destination: data.destination.name,
     };
+
+
+    this._onChangeDestination = this._onChangeDestination.bind(this);
+    this._onChangeType = this._onChangeType.bind(this);
+    this.bind();
   }
 
   bind() {
     this.getElement().querySelector(`.event__input--destination`)
-      .addEventListener(`change`, (evt) => {
-        const destination = this._destinations.find((el) => el.name === evt.target.value);
-        this.state.destination = destination;
-        this.partialUpdate();
-      });
+      .addEventListener(`change`, this._onChangeDestination);
+    this.getElement().querySelector(`.event__type-list`)
+      .addEventListener(`click`, this._onChangeType);
+  }
+
+  _onChangeType(evt) {
+    if (evt.target.classList.contains(`event__type-input`)) {
+      this.state.type = evt.target.value;
+      const {offers} = this._offers.find((el) => el.type === this.state.type);
+      this.setOffersOfType(offers);
+    }
+  }
+
+  _onChangeDestination(evt) {
+    this.state.destination = evt.target.value;
+    const {description, pictures} = this._destinations.find((el) => el.name === this.state.destination);
+    this.setTextOnDestination(description);
+    this.setImageOnDestination(pictures);
+  }
+
+  setTextOnDestination(text) {
+    this.getElement().querySelector(`.event__destination-description`)
+      .textContent = text;
+  }
+
+  setImageOnDestination(images) {
+    this.getElement().querySelector(`.event__photos-tape`)
+      .innerHTML = images.map(({src, description}) => {
+        return `<img class="event__photo" src="${src}" alt="${description}">`;
+      }).join(``);
+  }
+
+  setOffersOfType(offers) {
+    this.getElement().querySelector(`.event__available-offers`)
+      .innerHTML = offers.map(({name, price}, index) => {
+        return `<div class="event__offer-selector">
+                            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="add-option" value="${name}">
+                            <label class="event__offer-label" for="event-offer-luggage-${index}">
+                              <span class="event__offer-title">${name}</span>
+                              +
+                              €&nbsp;<span class="event__offer-price">${price}</span>
+                            </label>
+                          </div>`;
+      }).join(``);
   }
 
   partialUpdate() {
@@ -36,7 +78,7 @@ export default class CardEdit extends AbstractComponent {
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._data.type}.png" alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src="img/icons/${this.state.type}.png" alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -45,37 +87,37 @@ export default class CardEdit extends AbstractComponent {
                             <legend class="visually-hidden">Transfer</legend>
 
                             <div class="event__type-item">
-                              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+                              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${this.state.type === `taxi` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+                              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${this.state.type === `bus` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+                              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${this.state.type === `train` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+                              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${this.state.type === `ship` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
+                              <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport" ${this.state.type === `transport` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+                              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${this.state.type === `drive` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
+                              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${this.state.type === `flight` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
                             </div>
                           </fieldset>
@@ -84,17 +126,17 @@ export default class CardEdit extends AbstractComponent {
                             <legend class="visually-hidden">Activity</legend>
 
                             <div class="event__type-item">
-                              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+                              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${this.state.type === `check-in` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+                              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${this.state.type === `sightseeing` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
                             </div>
 
                             <div class="event__type-item">
-                              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+                              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${this.state.type === `restaurant` ? `checked` : ``}>
                               <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
                             </div>
                           </fieldset>
@@ -108,8 +150,8 @@ export default class CardEdit extends AbstractComponent {
                         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.destination.name}" list="destination-list-1">
                         <datalist id="destination-list-1">
                         ${this._destinations.map(({name}) => {
-      return `<option value="${name}"></option>`;
-    })}
+    return `<option value="${name}"></option>`;
+  })}
                           
                         </datalist>
                       </div>
@@ -157,7 +199,7 @@ export default class CardEdit extends AbstractComponent {
 
                         <div class="event__available-offers">
                         ${this._data.offers.map(({title, price, accepted}, index) => {
-      return `<div class="event__offer-selector">
+    return `<div class="event__offer-selector">
                             <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="add-option" 
                             ${accepted ? `checked` : ``} value="${title}">
                             <label class="event__offer-label" for="event-offer-luggage-${index}">
@@ -166,7 +208,7 @@ export default class CardEdit extends AbstractComponent {
                               €&nbsp;<span class="event__offer-price">${price}</span>
                             </label>
                           </div>`;
-    }).join(``)}
+  }).join(``)}
                           
                         </div>
                       </section>
@@ -180,8 +222,8 @@ export default class CardEdit extends AbstractComponent {
                         <div class="event__photos-container">
                           <div class="event__photos-tape">
                           ${this._data.destination.pictures.map((img) => {
-      return `<img class="event__photo" src="${img.src}" alt="Event photo">`;
-    })}
+    return `<img class="event__photo" src="${img.src}" alt="Event photo">`;
+  }).join(``)}
                             
                           </div>
                         </div>
