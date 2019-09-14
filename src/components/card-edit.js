@@ -7,10 +7,26 @@ export default class CardEdit extends AbstractComponent {
 
     this._offers = model.offers;
     this._destinations = model.destinations;
+
+    this.bind();
+
+    this.state = {
+      destination: this._destinations.find((el) => el.name === this.getElement().querySelector(`.event__input--destination`).value),
+      offers: null,
+    };
   }
 
-  removeElement() {
-    this._element = null;
+  bind() {
+    this.getElement().querySelector(`.event__input--destination`)
+      .addEventListener(`change`, (evt) => {
+        const destination = this._destinations.find((el) => el.name === evt.target.value);
+        this.state.destination = destination;
+        this.partialUpdate();
+      });
+  }
+
+  partialUpdate() {
+    this._element.innerHTML = this.getTemplate();
   }
 
   getTemplate() {
@@ -91,7 +107,9 @@ export default class CardEdit extends AbstractComponent {
                         </label>
                         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.destination.name}" list="destination-list-1">
                         <datalist id="destination-list-1">
-                        ${this._destinations.map(({name}) => {return `<option value="${name}"></option>`})}
+                        ${this._destinations.map(({name}) => {
+      return `<option value="${name}"></option>`;
+    })}
                           
                         </datalist>
                       </div>
