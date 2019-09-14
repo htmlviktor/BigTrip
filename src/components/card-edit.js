@@ -1,12 +1,12 @@
 import AbstractComponent from "./abstract-component";
 
-export default class CardEdit extends AbstractComponent{
-  constructor({offers, destination, price, type}) {
+export default class CardEdit extends AbstractComponent {
+  constructor(data, model) {
     super();
-    this._options = offers;
-    this._price = price;
-    this._type = type;
-    this._destination = destination;
+    this._data = data;
+
+    this._offers = model.offers;
+    this._destinations = model.destinations;
   }
 
   removeElement() {
@@ -20,7 +20,7 @@ export default class CardEdit extends AbstractComponent{
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._type}.png" alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._data.type}.png" alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -89,11 +89,10 @@ export default class CardEdit extends AbstractComponent{
                         <label class="event__label  event__type-output" for="event-destination-1">
                           Sightseeing at
                         </label>
-                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Saint Petersburg" list="destination-list-1">
+                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.destination.name}" list="destination-list-1">
                         <datalist id="destination-list-1">
-                          <option value="Amsterdam"></option>
-                          <option value="Geneva"></option>
-                          <option value="Chamonix"></option>
+                        ${this._destinations.map(({name}) => {return `<option value="${name}"></option>`})}
+                          
                         </datalist>
                       </div>
 
@@ -114,7 +113,7 @@ export default class CardEdit extends AbstractComponent{
                           <span class="visually-hidden">Price</span>
                           €
                         </label>
-                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${this._price}">
+                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${this._data.price}">
                       </div>
 
                       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -139,17 +138,17 @@ export default class CardEdit extends AbstractComponent{
                         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                         <div class="event__available-offers">
-                        ${this._options.map(({title, price, status}, index) => {
-    return `<div class="event__offer-selector">
+                        ${this._data.offers.map(({title, price, accepted}, index) => {
+      return `<div class="event__offer-selector">
                             <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="add-option" 
-                            ${status ? `checked` : ``} value="${title}">
+                            ${accepted ? `checked` : ``} value="${title}">
                             <label class="event__offer-label" for="event-offer-luggage-${index}">
                               <span class="event__offer-title">${title}</span>
                               +
                               €&nbsp;<span class="event__offer-price">${price}</span>
                             </label>
                           </div>`;
-  }).join(``)}
+    }).join(``)}
                           
                         </div>
                       </section>
@@ -157,14 +156,14 @@ export default class CardEdit extends AbstractComponent{
                       <section class="event__section  event__section--destination">
                         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                         <p class="event__destination-description">
-                       ${this._destination.description}
+                       ${this._data.destination.description}
                         </p>
 
                         <div class="event__photos-container">
                           <div class="event__photos-tape">
-                          ${this._destination.pictures.map((img) => {
-    return `<img class="event__photo" src="${img.src}" alt="Event photo">`;
-  })}
+                          ${this._data.destination.pictures.map((img) => {
+      return `<img class="event__photo" src="${img.src}" alt="Event photo">`;
+    })}
                             
                           </div>
                         </div>

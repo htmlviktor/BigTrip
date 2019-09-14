@@ -9,10 +9,10 @@ import flatpickr from "flatpickr";
 import moment from "moment";
 
 export default class TripController extends AbstractComponent {
-  constructor(container) {
+  constructor(container, model) {
     super();
     this._container = container;
-    this._data = null;
+    this._model = model;
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
     this._addEvent = new AddEvent();
@@ -83,7 +83,7 @@ export default class TripController extends AbstractComponent {
 
   renderCards(container, data) {
     data.forEach((card) => {
-      const pointController = new PointController(container, this.model, card, this.onChangeData, this.onChangeView);
+      const pointController = new PointController(container, this._model, card, this.onChangeData, this.onChangeView);
       this._subscriptions.push(pointController.setDefaultView.bind(pointController));
     });
   }
@@ -94,15 +94,15 @@ export default class TripController extends AbstractComponent {
     render(this._daysContainer.getElement(), day.getElement(), Position.BEFORE_END);
     switch (this._sort.getElement().querySelector(`.trip-sort__input:checked`).dataset.sort) {
       case `time`:
-        const sortByTime = [...this._data.sort()];
+        const sortByTime = [...this._model.points.sort()];
         this.renderCards(day.getElement().querySelector(`.trip-events__list`), sortByTime);
         break;
       case `price`:
-        const sortByPrice = [...this._data.sort((a, b) => b.price - a.price)];
+        const sortByPrice = [...this._model.points.sort((a, b) => b.price - a.price)];
         this.renderCards(day.getElement().querySelector(`.trip-events__list`), sortByPrice);
         break;
       default:
-        this.renderDays(this._data);
+        this.renderDays(this._model.points);
     }
   }
 

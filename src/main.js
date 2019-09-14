@@ -18,7 +18,8 @@ render(menuContainer, new Menu(dataMenu).getElement(), Position.BEFORE_END);
 render(menuContainer, new Filter(dataFilters).getElement(), Position.AFTER_END);
 
 const model = new Model();
-const tripController = new TripController(tripEvents);
+const tripController = new TripController(tripEvents, model);
+
 Promise.all([
   model.getOffers(),
   model.getPoints(),

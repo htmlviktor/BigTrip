@@ -14,7 +14,7 @@ export default class PointController extends AbstractComponent {
     this._container = container;
     this._data = data;
     this._card = new Card(data);
-    this._cardEdit = new CardEdit(data);
+    this._cardEdit = new CardEdit(data, model);
     this.onDataChange = onDataChange;
     this.onChangeView = onChangeView;
     this.create();
@@ -34,7 +34,7 @@ export default class PointController extends AbstractComponent {
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
       enableTime: true,
-      dateFormat: "d.m.y",
+      dateFormat: `d.m.y`,
       defaultDate: Date.now(),
     });
     card.querySelector(`.event__rollup-btn`)
@@ -70,17 +70,16 @@ export default class PointController extends AbstractComponent {
     switch (evt.target.parentNode.parentNode.querySelector(`legend`).textContent) {
       case `Transfer`:
         label.textContent = `${value} to `;
-        image.src = `img/icons/${value}.png`
+        image.src = `img/icons/${value}.png`;
         break;
       case `Activity`:
         label.textContent = `${value} in `;
-        image.src = `img/icons/${value}.png`
+        image.src = `img/icons/${value}.png`;
         break;
     }
   }
 
   reloadOptions(entry) {
-    console.log(this._data)
     const arr = this._data.offers.map((it) => Object.assign({}, it));
     arr.forEach((it) => it.status = false);
     entry.forEach((name) => arr.find((it) => it.title === name).status = true);
