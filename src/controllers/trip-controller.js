@@ -7,6 +7,7 @@ import DaysContainer from "../components/days-container";
 import AddEvent from "../components/add-event";
 import flatpickr from "flatpickr";
 import moment from "moment";
+import api from "../api/api";
 
 export default class TripController extends AbstractComponent {
   constructor(container, model) {
@@ -106,8 +107,10 @@ export default class TripController extends AbstractComponent {
     }
   }
 
-  onChangeData(oldData, newData) {
-    console.log(newData)
+  onChangeData(data) {
+    this._model.updatePoint(data).then((res) => {
+      console.log(res);
+    });
   }
 
   onChangeView() {

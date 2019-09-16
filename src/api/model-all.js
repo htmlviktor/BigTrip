@@ -34,7 +34,7 @@ export default class Model {
   }
 
   updatePoint(data) {
-    return api.updatePoint()
+    return api.updatePoint({id: data.id, data: data.toRAW()});
   }
 
   getPoints() {

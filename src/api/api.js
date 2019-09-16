@@ -1,5 +1,4 @@
 import ModelPoint from "./model-adapter";
-import Model from "./model-all";
 
 const Method = {
   GET: `GET`,
@@ -47,6 +46,7 @@ export default class API {
       url: `points/${id}`,
       method: Method.PUT,
       body: JSON.stringify(data),
+      headers: new Headers({'Content-Type': `application/json`})
     }).then(toJSON).then(ModelPoint.parsePoint);
   }
 

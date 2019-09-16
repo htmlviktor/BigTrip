@@ -34,7 +34,9 @@ export default class PointController extends AbstractComponent {
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
       enableTime: true,
-      dateFormat: `d.m.y`,
+      dateFormat: `U`,
+      altInput: true,
+      altFormat: `d.m.y`,
       defaultDate: Date.now(),
     });
     card.querySelector(`.event__rollup-btn`)
@@ -49,17 +51,21 @@ export default class PointController extends AbstractComponent {
     cardEdit.querySelector(`form`)
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
-        const entry = new FormData(cardEdit.querySelector(`form`));
-        const obj = Object.assign({}, this._data, {
-          price: entry.get(`event-price`),
-          offers: [],
-          type: entry.get(`event-type`),
-          date: entry.get(`event-start-time`),
-          destination: entry.get(`event-destination`)
-        });
-        this.onDataChange(this._data, obj);
+        this.setNewData();
+        this.onDataChange(this._data);
       });
   };
+
+  setNewData() {
+    const entry = new FormData(this._cardEdit.getElement().querySelector(`form`));
+    this._data.price = Number(entry.get(`event-price`));
+    this._data.offers = [];
+    this._data.type = entry.get(`event-type`);
+    this._data.date = {
+      from: Number(entry.get(`event-start-time`)),
+      to: Number(entry.get(`event-end-time`))
+    };
+  }
 
 
   setDefaultView() {
@@ -68,4 +74,4 @@ export default class PointController extends AbstractComponent {
     }
   }
 
-}
+};
