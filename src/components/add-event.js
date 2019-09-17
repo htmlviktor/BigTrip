@@ -1,9 +1,10 @@
 import AbstractComponent from "./abstract-component";
 
 export default class AddEvent extends AbstractComponent {
-  constructor() {
+  constructor(model) {
     super();
-  };
+    this._model = model;
+  }
 
   getTemplate() {
     return `<form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -82,10 +83,10 @@ export default class AddEvent extends AbstractComponent {
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
                 <datalist id="destination-list-1">
-                  <option value="Amsterdam"></option>
-                  <option value="Geneva"></option>
-                  <option value="Chamonix"></option>
-                  <option value="Saint Petersburg"></option>
+                  
+                  ${this._model.destinations.map((it) => {
+    return `<option value="${it.name}"></option>`;
+  })}
                 </datalist>
               </div>
 
@@ -114,4 +115,4 @@ export default class AddEvent extends AbstractComponent {
             </header>
           </form>`;
   }
-};
+}

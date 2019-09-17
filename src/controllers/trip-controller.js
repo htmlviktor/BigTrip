@@ -7,7 +7,8 @@ import DaysContainer from "../components/days-container";
 import AddEvent from "../components/add-event";
 import flatpickr from "flatpickr";
 import moment from "moment";
-import api from "../api/api";
+import ModelPoint from "../api/model-adapter";
+
 
 export default class TripController extends AbstractComponent {
   constructor(container, model) {
@@ -16,7 +17,7 @@ export default class TripController extends AbstractComponent {
     this._model = model;
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
-    this._addEvent = new AddEvent();
+    this._addEvent = new AddEvent(model);
 
     this._subscriptions = [];
     this.onChangeView = this.onChangeView.bind(this);
@@ -36,9 +37,9 @@ export default class TripController extends AbstractComponent {
       price: entry.get(`event-price`),
       options: [],
       description: [],
-      photo: []
+      photo: [],
     };
-    this.onChangeData(null, obj);
+    this.onChangeData(`create`, new ModelPoint());
     this._addEvent.getElement().removeEventListener(`submit`, this.onAddEvent);
     this._addEvent.getElement().remove();
   }
@@ -60,6 +61,8 @@ export default class TripController extends AbstractComponent {
     render(this._container, this._sort.getElement(), Position.BEFORE_END);
     render(this._container, this._daysContainer.getElement(), Position.AFTER_END);
     this._sort.getElement().addEventListener(`change`, this.onSort.bind(this));
+
+    this.renderDays(this._model.points);
   }
 
   show() {
@@ -107,10 +110,18 @@ export default class TripController extends AbstractComponent {
     }
   }
 
-  onChangeData(data) {
-    this._model.updatePoint(data).then((res) => {
-      console.log(res);
-    });
+  onChangeData(type, data) {
+    switch (type) {
+      case `update`:
+        this._model.updatePoint(data).then(() => this.onSort());
+        break;
+      case `create`:
+        console.log(data);
+        break;
+      case `delete`:
+        console.log(type);
+    }
+
   }
 
   onChangeView() {

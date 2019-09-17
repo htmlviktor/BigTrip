@@ -26,7 +26,6 @@ Promise.all([
   model.getDestinations()
 ]).then(() => {
   tripController.init();
-  tripController.renderDays(model.points);
 });
 
 

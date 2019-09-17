@@ -29,7 +29,7 @@ export default class PointController extends AbstractComponent {
 
     cardEdit.querySelector(`.event__reset-btn`)
       .addEventListener(`click`, () => {
-        this.onDataChange(this._data, null);
+        this.onDataChange(`delete`, this._data);
       });
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {

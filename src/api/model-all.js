@@ -7,6 +7,8 @@ export default class Model {
     this._points = points;
     this._destinations = destinations;
     this._offers = offers;
+
+    this.getPoints = this.getPoints.bind(this);
   }
 
   get points() {
@@ -34,7 +36,10 @@ export default class Model {
   }
 
   updatePoint(data) {
-    return api.updatePoint({id: data.id, data: data.toRAW()});
+    return api.updatePoint({id: data.id, data: data.toRAW()})
+      .then(() => {
+        return this.getPoints().then(() => this.points);
+      });
   }
 
   getPoints() {
