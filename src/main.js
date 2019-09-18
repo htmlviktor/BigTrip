@@ -1,31 +1,29 @@
-import {render, Position} from "./utils/utils";
-import {data, dataFilters, dataMenu, cities, dates} from "./data";
-import InfoTrip from "./components/trip-info";
 import Stats from "./components/stats";
-import Menu from "./components/menu";
-import Filter from "./components/filter";
 import TripController from "./controllers/trip-controller";
 import Model from "./api/model-all";
+import AppController from "./controllers/app-controller";
 
-const tripEvents = document.querySelector(`.trip-events`);
+
+
 const tripContainer = document.querySelector(`.trip-info`);
 const menuContainer = document.querySelector(`.trip-controls`);
+const tripEvents = document.querySelector(`.trip-events`);
 const routeContainer = document.querySelector(`.route__container`);
 
 
-render(tripContainer, new InfoTrip(cities, dates).getElement(), Position.BEFORE_END);
-render(menuContainer, new Menu(dataMenu).getElement(), Position.BEFORE_END);
-render(menuContainer, new Filter(dataFilters).getElement(), Position.AFTER_END);
-
 const model = new Model();
 const tripController = new TripController(tripEvents, model);
+
+
+
 
 Promise.all([
   model.getOffers(),
   model.getPoints(),
   model.getDestinations()
 ]).then(() => {
-  tripController.init();
+  const appController = new AppController(tripContainer, menuContainer, tripEvents, model);
+  appController.init();
 });
 
 
@@ -50,13 +48,4 @@ navigation.addEventListener(`click`, (evt) => {
       break;
   }
 });
-
-
-const priceElement = document.querySelector(`.trip-info__cost-value`);
-priceElement.textContent = data.map(({price}) => price).reduce((acc, cur) => acc + cur);
-
-
-const stats = new Stats(data);
-render(routeContainer, stats.getElement(), Position.AFTER_END);
-
 

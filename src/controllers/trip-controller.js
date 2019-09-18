@@ -24,6 +24,7 @@ export default class TripController extends AbstractComponent {
     this.onChangeData = this.onChangeData.bind(this);
 
     this.onAddEvent = this.onAddEvent.bind(this);
+    this.hide = this.hide.bind(this);
   }
 
   onAddEvent(evt) {

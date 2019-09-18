@@ -11,6 +11,18 @@ export default class Model {
     this.getPoints = this.getPoints.bind(this);
   }
 
+  get cities() {
+    return Array.from(new Set(this._points.map(({destination}) => destination.name)));
+  }
+
+  get dates() {
+    return this._points.map(({date}) => date.from);
+  }
+
+  get cost() {
+    return this.points.map(({price}) => price).reduce((acc, cur) => acc + cur);
+  }
+
   get points() {
     return this._points;
   }
@@ -47,11 +59,13 @@ export default class Model {
       this.points = res;
     });
   }
+
   getDestinations() {
     return api.getDestinations().then((res) => {
       this._destinations = res;
     });
   }
+
   getOffers() {
     return api.getOffers().then((res) => {
       this._offers = res;

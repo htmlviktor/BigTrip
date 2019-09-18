@@ -1,25 +1,23 @@
 import AbstractComponent from "./abstract-component";
-import Chart from'chart.js';
+import Chart from 'chart.js';
 
 export default class Stats extends AbstractComponent {
-  constructor(data) {
+  constructor(model) {
     super();
-    this._data = data;
+    this._model = model;
   }
 
-  hide() {
-    this._element.classList.add(`visually-hidden`);
-  }
-
-  show() {
-    this._element.classList.remove(`visually-hidden`);
-  }
-
-  chartMoney() {
-    const ctx = this._element.querySelector(`.statistics__chart--money`);
-    const barMoneyChart = new Chart(ctx, {
+  getChart() {
+    const ctx = this.getElement().querySelector(`.statistics__chart--money`);
+    const myBarChart = new Chart(ctx, {
       type: `horizontalBar`,
-      data: this._data,
+      data: {
+        labels: [`FLY`, `STAY`, `DRIVE`, `LOCK`, `EAT`, `RIDE`],
+        datasets: [{
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: `white`
+        }]
+      }
     });
   }
 
