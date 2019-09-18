@@ -9,6 +9,7 @@ export default class StatsController {
 
   init() {
     render(this._container, this.stats.getElement(), Position.AFTER_END);
+    this.stats.getChart();
   }
 
   hide() {

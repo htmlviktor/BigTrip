@@ -1,23 +1,52 @@
 import AbstractComponent from "./abstract-component";
 import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default class Stats extends AbstractComponent {
-  constructor(model) {
+  constructor({points}) {
     super();
-    this._model = model;
+    this._points = points;
   }
 
   getChart() {
+    const labels = Array.from(new Set(this._points.map(({type}) => type)));
+    const data = labels.map((it) => {
+      return this._points.filter((point) => point.type === it).reduce((acc, val) => val.price + acc, 0);
+    });
     const ctx = this.getElement().querySelector(`.statistics__chart--money`);
     const myBarChart = new Chart(ctx, {
+      plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
-        labels: [`FLY`, `STAY`, `DRIVE`, `LOCK`, `EAT`, `RIDE`],
+        labels,
         datasets: [{
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: `white`
+          label: false,
+          data,
+          backgroundColor: `#ffd054`,
+          borderWidth: 1,
+          borderColor: `#424242`,
         }]
-      }
+      },
+      options: {
+        plugins: {
+          datalabels: {
+            formatter(value) {
+              return `$ ${value}`;
+            },
+            align: `end`,
+            clamp: true,
+            backgroundColor: `#078ff0d4`,
+            borderWidth: 1,
+            borderColor: `#424242`,
+            font: {
+              size: 17
+            },
+            color: `#fff`
+          }
+        },
+      },
+
+
     });
   }
 

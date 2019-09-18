@@ -22,7 +22,7 @@ Promise.all([
   model.getPoints(),
   model.getDestinations()
 ]).then(() => {
-  const appController = new AppController(tripContainer, menuContainer, tripEvents, model);
+  const appController = new AppController(tripContainer, menuContainer, tripEvents, routeContainer, model);
   appController.init();
 });
 
