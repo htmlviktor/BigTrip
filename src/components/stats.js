@@ -20,7 +20,6 @@ export default class Stats extends AbstractComponent {
       data: {
         labels,
         datasets: [{
-          label: false,
           data,
           backgroundColor: `#ffd054`,
           borderWidth: 1,
@@ -42,6 +41,36 @@ export default class Stats extends AbstractComponent {
               size: 17
             },
             color: `#fff`
+          }
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              display: true
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              fontStyle: `bold`,
+              fontColor: `#000000`
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            }
+          }]
+        },
+        legend: {
+          display: false
+        },
+        layout: {
+          padding: {
+            left: 50
           }
         },
       },
