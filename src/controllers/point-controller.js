@@ -8,14 +8,13 @@ import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
 
 export default class PointController extends AbstractComponent {
-  constructor(container, model, data, onDataChange, onChangeView) {
+  constructor(container, model, data, onChangeData, onChangeView) {
     super();
-    this.model = model;
     this._container = container;
     this._data = data;
     this._card = new Card(data);
     this._cardEdit = new CardEdit(data, model);
-    this.onDataChange = onDataChange;
+    this.onChangeData = onChangeData;
     this.onChangeView = onChangeView;
     this.create();
   }
@@ -29,7 +28,7 @@ export default class PointController extends AbstractComponent {
 
     cardEdit.querySelector(`.event__reset-btn`)
       .addEventListener(`click`, () => {
-        this.onDataChange(`delete`, this._data);
+        this.onChangeData(`delete`, this._data);
       });
 
     flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
@@ -52,7 +51,6 @@ export default class PointController extends AbstractComponent {
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
         this.setNewData();
-        this.onDataChange(this._data);
       });
   };
 
@@ -65,6 +63,7 @@ export default class PointController extends AbstractComponent {
       from: Number(entry.get(`event-start-time`)),
       to: Number(entry.get(`event-end-time`))
     };
+    this.onChangeData(`update`, this._data);
   }
 
 

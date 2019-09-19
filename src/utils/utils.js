@@ -6,7 +6,8 @@ export const createElement = (template) => {
 
 export const Position = {
   BEFORE_END: `beforeend`,
-  AFTER_END: `afterend`
+  AFTER_END: `afterend`,
+  AFTER: `after`
 }
 
 export const render = (container, element, position) => {
@@ -17,5 +18,7 @@ export const render = (container, element, position) => {
     case `beforeend`:
       container.prepend(element);
       break;
+    case `after`:
+      container.after(element);
   }
 }

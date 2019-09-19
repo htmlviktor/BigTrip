@@ -54,6 +54,13 @@ export default class Model {
       });
   }
 
+  deletePoint(data) {
+    return api.deletePoint(data)
+      .then(() => {
+        return this.getPoints().then(() => this.points);
+      });
+  }
+
   getPoints() {
     return api.getPoints().then((res) => {
       this.points = res;

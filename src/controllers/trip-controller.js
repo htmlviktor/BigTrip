@@ -11,7 +11,7 @@ import ModelPoint from "../api/model-adapter";
 
 
 export default class TripController extends AbstractComponent {
-  constructor(container, model) {
+  constructor(container, model, onChangeData) {
     super();
     this._container = container;
     this._model = model;
@@ -21,32 +21,24 @@ export default class TripController extends AbstractComponent {
 
     this._subscriptions = [];
     this.onChangeView = this.onChangeView.bind(this);
-    this.onChangeData = this.onChangeData.bind(this);
+    this.onChangeData = onChangeData;
 
+    this.addEvent = this.addEvent.bind(this);
     this.onAddEvent = this.onAddEvent.bind(this);
     this.hide = this.hide.bind(this);
+
   }
 
   onAddEvent(evt) {
     evt.preventDefault();
-    const entry = new FormData(this._addEvent.getElement());
-
-    const obj = {
-      type: entry.get(`event-type`),
-      city: entry.get(`event-destination`),
-      date: entry.get(`event-start-time`),
-      price: entry.get(`event-price`),
-      options: [],
-      description: [],
-      photo: [],
-    };
-    this.onChangeData(`create`, new ModelPoint());
+    // Тут считать данные с формы и отправить
+    // this.onChangeData(`create`, `create`);
     this._addEvent.getElement().removeEventListener(`submit`, this.onAddEvent);
     this._addEvent.getElement().remove();
   }
 
   addEvent() {
-    render(this._container, this._addEvent.getElement(), Position.BEFORE_END);
+    render(this._sort.getElement(), this._addEvent.getElement(), Position.AFTER);
     flatpickr(this._addEvent.getElement().querySelectorAll(`.event__input--time`), {
       dateFormat: `d.m.y`,
       defaultDate: Date.now(),
@@ -76,8 +68,8 @@ export default class TripController extends AbstractComponent {
 
 
   renderDays(points) {
-    const dates = Array.from(new Set(points.map((it) => moment(it.date.from).format(`MMM DD`))));
-    dates.sort().forEach((date, index) => {
+    const dates = Array.from(new Set(points.map((it) => moment(it.date.from).format(`MMM DD`)))).sort();
+    dates.forEach((date, index) => {
       const day = new Day(date, index);
       render(this._daysContainer.getElement(), day.getElement(), Position.AFTER_END);
       this.renderCards(
@@ -111,19 +103,6 @@ export default class TripController extends AbstractComponent {
     }
   }
 
-  onChangeData(type, data) {
-    switch (type) {
-      case `update`:
-        this._model.updatePoint(data).then(() => this.onSort());
-        break;
-      case `create`:
-        console.log(data);
-        break;
-      case `delete`:
-        console.log(type);
-    }
-
-  }
 
   onChangeView() {
     this._subscriptions.forEach((subscription) => subscription());
