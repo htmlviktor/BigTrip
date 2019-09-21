@@ -1,6 +1,8 @@
+import model from "./model-all";
+
 export default class ModelPoint {
   constructor(data) {
-    this.id = data[`id`] || ``;
+    this.id = data[`id`] || null;
     this.price = data[`base_price`] || ``;
     this.destination = data[`destination`] || ``;
     this.isFavorite = data[`is_favorite`] || false;
@@ -30,6 +32,20 @@ export default class ModelPoint {
       'is_favorite': this.isFavorite,
       'offers': this.offers,
       'type': this.type
+    };
+  }
+
+  static createAdapter(obj) {
+    const destination = model.destinations.find((dest) => dest.name === obj.name);
+    const {offers} = model.offers.find((offer) => offer.type === obj.type);
+    return {
+      'base_price': Number(obj.price),
+      'date_from': new Date(Number(obj.dateFrom)).toISOString(),
+      'date_to': new Date(Number(obj.dateTo)).toISOString(),
+      'destination': {...destination},
+      'offers': offers,
+      'type': obj.type,
+      'is_favorite': false
     };
   }
 

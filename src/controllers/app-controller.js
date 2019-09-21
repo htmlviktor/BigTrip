@@ -59,7 +59,10 @@ export default class AppController {
         });
         break;
       case `create`:
-        console.log(data);
+        this._model.createPoint(data).then(() => {
+          this.tripController.onSort();
+          this.onSubscribe();
+        });
         break;
       case `delete`:
         this._model.deletePoint(data).then(() => {

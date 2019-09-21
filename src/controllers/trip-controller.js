@@ -32,11 +32,18 @@ export default class TripController extends AbstractComponent {
   onCreateEvent(evt) {
     evt.preventDefault();
     const entry = new FormData(evt.currentTarget);
-    const model = new ModelPoint({id: 2});
-    console.log(model);
-    // Тут считать данные с формы и отправить
-    // this.onChangeData(`create`, `create`);
+    const model = ModelPoint.createAdapter({
+      price: entry.get(`event-price`),
+      name: entry.get(`event-destination`),
+      dateFrom: entry.get(`event-start-time`),
+      dateTo: entry.get(`event-end-time`),
+      type: this._addEvent.getElement().querySelector(`.event__type-input:checked`).value,
+      offers: [],
+    });
+
+    this.onChangeData(`create`, model);
     this._addEvent.getElement().removeEventListener(`submit`, this.onCreateEvent);
+    this._addEvent.getElement().reset();
     this._addEvent.getElement().remove();
   }
 

@@ -41,7 +41,7 @@ export default class API {
       .then(toJSON);
   }
 
-  createPoint({data}) {
+  createPoint(data) {
     return this._load({
       url: `points`,
       method: Method.POST,

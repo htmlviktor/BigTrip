@@ -1,4 +1,4 @@
-import Model from "./api/model-all";
+import model from "./api/model-all";
 import AppController from "./controllers/app-controller";
 
 
@@ -7,8 +7,6 @@ const menuContainer = document.querySelector(`.trip-controls`);
 const tripEvents = document.querySelector(`.trip-events`);
 const routeContainer = document.querySelector(`.route__container`);
 
-
-const model = new Model();
 
 Promise.all([
   model.getOffers(),

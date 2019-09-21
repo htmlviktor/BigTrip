@@ -2,7 +2,7 @@ import API from "./api";
 
 const api = new API();
 
-export default class Model {
+class Model {
   constructor(points, destinations, offers) {
     this._points = points;
     this._destinations = destinations;
@@ -48,9 +48,15 @@ export default class Model {
   }
 
   updatePoint(data) {
-    console.log(data);
-    console.log(this._points[0].toRAW());
     return api.updatePoint({id: data.id, data})
+      .then(() => {
+        return this.getPoints().then(() => this.points);
+      });
+  }
+
+  createPoint(data) {
+    console.log(data);
+    return api.createPoint(data)
       .then(() => {
         return this.getPoints().then(() => this.points);
       });
@@ -81,3 +87,7 @@ export default class Model {
     });
   }
 }
+
+const model = new Model();
+
+export default model;
