@@ -24,30 +24,36 @@ export default class TripController extends AbstractComponent {
     this.onChangeData = onChangeData;
 
     this.addEvent = this.addEvent.bind(this);
-    this.onAddEvent = this.onAddEvent.bind(this);
+    this.onCreateEvent = this.onCreateEvent.bind(this);
     this.hide = this.hide.bind(this);
 
   }
 
-  onAddEvent(evt) {
+  onCreateEvent(evt) {
     evt.preventDefault();
+    const entry = new FormData(evt.currentTarget);
+    const model = new ModelPoint({id: 2});
+    console.log(model);
     // Тут считать данные с формы и отправить
     // this.onChangeData(`create`, `create`);
-    this._addEvent.getElement().removeEventListener(`submit`, this.onAddEvent);
+    this._addEvent.getElement().removeEventListener(`submit`, this.onCreateEvent);
     this._addEvent.getElement().remove();
   }
 
   addEvent() {
     render(this._sort.getElement(), this._addEvent.getElement(), Position.AFTER);
     flatpickr(this._addEvent.getElement().querySelectorAll(`.event__input--time`), {
-      dateFormat: `d.m.y`,
+      enableTime: true,
+      dateFormat: `U`,
+      altInput: true,
+      altFormat: `d.m.y`,
       defaultDate: Date.now(),
     });
     this._addEvent.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, () => {
         this._addEvent.getElement().remove();
       });
-    this._addEvent.getElement().addEventListener(`submit`, this.onAddEvent);
+    this._addEvent.getElement().addEventListener(`submit`, this.onCreateEvent);
   }
 
   init() {

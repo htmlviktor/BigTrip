@@ -48,7 +48,9 @@ export default class Model {
   }
 
   updatePoint(data) {
-    return api.updatePoint({id: data.id, data: data.toRAW()})
+    console.log(data);
+    console.log(this._points[0].toRAW());
+    return api.updatePoint({id: data.id, data})
       .then(() => {
         return this.getPoints().then(() => this.points);
       });

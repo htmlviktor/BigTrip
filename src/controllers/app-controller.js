@@ -62,7 +62,7 @@ export default class AppController {
         console.log(data);
         break;
       case `delete`:
-        this._model.deletePoint(data).then((res) => {
+        this._model.deletePoint(data).then(() => {
           this.tripController.onSort();
           this.onSubscribe();
         });

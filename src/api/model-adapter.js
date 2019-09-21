@@ -1,14 +1,14 @@
 export default class ModelPoint {
   constructor(data) {
-    this.id = data[`id`];
-    this.price = data[`base_price`];
-    this.destination = data[`destination`];
-    this.isFavorite = data[`is_favorite`];
-    this.offers = data[`offers`];
-    this.type = data[`type`];
+    this.id = data[`id`] || ``;
+    this.price = data[`base_price`] || ``;
+    this.destination = data[`destination`] || ``;
+    this.isFavorite = data[`is_favorite`] || false;
+    this.offers = data[`offers`] || [];
+    this.type = data[`type`] || ``;
     this.date = {
-      from: data[`date_from`],
-      to: data[`date_to`],
+      from: data[`date_from`] || ``,
+      to: data[`date_to`] || ``,
     };
   }
 
