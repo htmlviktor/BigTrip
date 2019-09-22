@@ -5,7 +5,7 @@ import PointController from "./point-controller";
 import Sort from "../components/sorting";
 import DaysContainer from "../components/days-container";
 import AddEvent from "../components/add-event";
-import flatpickr from "flatpickr";
+import {flatWithCard} from "../utils/flatpickr";
 import moment from "moment";
 import ModelPoint from "../api/model-adapter";
 
@@ -26,41 +26,26 @@ export default class TripController extends AbstractComponent {
     this.addEvent = this.addEvent.bind(this);
     this.onCreateEvent = this.onCreateEvent.bind(this);
     this.hide = this.hide.bind(this);
-
+    this.addElementRemove = this.addElementRemove.bind(this);
   }
 
   onCreateEvent(evt) {
     evt.preventDefault();
     const entry = new FormData(evt.currentTarget);
-    const model = ModelPoint.createAdapter({
-      price: entry.get(`event-price`),
-      name: entry.get(`event-destination`),
-      dateFrom: entry.get(`event-start-time`),
-      dateTo: entry.get(`event-end-time`),
-      type: this._addEvent.getElement().querySelector(`.event__type-input:checked`).value,
-      offers: [],
-    });
 
-    this.onChangeData(`create`, model);
+    this.onChangeData(`create`, ModelPoint.createAdapter(entry));
     this._addEvent.getElement().removeEventListener(`submit`, this.onCreateEvent);
     this._addEvent.getElement().reset();
     this._addEvent.getElement().remove();
   }
 
   addEvent() {
-    render(this._sort.getElement(), this._addEvent.getElement(), Position.AFTER);
-    flatpickr(this._addEvent.getElement().querySelectorAll(`.event__input--time`), {
-      enableTime: true,
-      dateFormat: `U`,
-      altInput: true,
-      altFormat: `d.m.y`,
-      defaultDate: Date.now(),
-    });
-    this._addEvent.getElement().querySelector(`.event__reset-btn`)
-      .addEventListener(`click`, () => {
-        this._addEvent.getElement().remove();
-      });
-    this._addEvent.getElement().addEventListener(`submit`, this.onCreateEvent);
+    const item = this._addEvent.getElement();
+    render(this._sort.getElement(), item, Position.AFTER);
+    item.querySelector(`.event__reset-btn`).addEventListener(`click`, this.addElementRemove);
+    item.addEventListener(`submit`, this.onCreateEvent);
+
+    flatWithCard(item.querySelectorAll(`.event__input--time`));
   }
 
   init() {
@@ -77,6 +62,10 @@ export default class TripController extends AbstractComponent {
 
   hide() {
     this._container.classList.add(`visually-hidden`);
+  }
+
+  addElementRemove() {
+    this._addEvent.getElement().remove();
   }
 
 

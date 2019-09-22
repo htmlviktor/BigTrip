@@ -35,18 +35,31 @@ export default class ModelPoint {
     };
   }
 
-  static createAdapter(obj) {
-    const destination = model.destinations.find((dest) => dest.name === obj.name);
-    const {offers} = model.offers.find((offer) => offer.type === obj.type);
+  static createAdapter(entry) {
+    const destination = model.destinations.find((dest) => dest.name === entry.get(`event-destination`));
+    const {offers} = model.offers.find((offer) => offer.type === entry.get(`event-type`));
     return {
-      'base_price': Number(obj.price),
-      'date_from': new Date(Number(obj.dateFrom)).toISOString(),
-      'date_to': new Date(Number(obj.dateTo)).toISOString(),
+      'base_price': Number(entry.get(`event-price`)),
+      'date_from': new Date(Number(entry.get(`event-start-time`))).toISOString(),
+      'date_to': new Date(Number(entry.get(`event-end-time`))).toISOString(),
       'destination': {...destination},
       'offers': offers,
-      'type': obj.type,
+      'type': entry.get(`event-type`),
       'is_favorite': false
     };
+  }
+
+  static updateAdapter(entry, destination) {
+    return {
+      'base_price': Number(entry.get(`event-price`)),
+      'type': entry.get(`event-type`),
+      'date_from': Number(entry.get(`event-start-time`)),
+      'date_to': Number(entry.get(`event-end-time`)),
+      'destination': {
+        ...destination(),
+        name: entry.get(`event-destination`),
+      }
+    }
   }
 
 };

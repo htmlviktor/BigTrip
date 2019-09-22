@@ -2,10 +2,11 @@ import AbstractComponent from "../components/abstract-component";
 import {render, Position} from "../utils/utils";
 import Card from "../components/card";
 import CardEdit from "../components/card-edit";
-import flatpickr from 'flatpickr';
+import {flatWithCard} from "../utils/flatpickr";
 
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
+import ModelPoint from "../api/model-adapter";
 
 
 export default class PointController extends AbstractComponent {
@@ -14,6 +15,7 @@ export default class PointController extends AbstractComponent {
     this.onUpdate = this.onUpdate.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onReplace = this.onReplace.bind(this);
+    this.getDestination = this.getDestination.bind(this);
 
     this._container = container;
     this._data = data;
@@ -31,13 +33,7 @@ export default class PointController extends AbstractComponent {
     const cardEdit = this._cardEdit.getElement();
 
     render(this._container, this._card.getElement(), Position.AFTER_END);
-    flatpickr(cardEdit.querySelectorAll(`.event__input--time`), {
-      enableTime: true,
-      dateFormat: `U`,
-      altInput: true,
-      altFormat: `d.m.y`,
-      defaultDate: Date.now(),
-    });
+    flatWithCard(cardEdit.querySelectorAll(`.event__input--time`));
 
     cardEdit.querySelector(`.event__reset-btn`)
       .addEventListener(`click`, this.onDelete);
@@ -50,23 +46,15 @@ export default class PointController extends AbstractComponent {
 
     cardEdit.querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, this.onReplace);
-  };
+  }
 
   onUpdate(evt) {
     evt.preventDefault();
     const entry = new FormData(this._cardEdit.getElement().querySelector(`form`));
-    const obj = Object.assign({}, this._data.toRAW(), {
-      'base_price': Number(entry.get(`event-price`)),
-      'type': entry.get(`event-type`),
-      'date_from': Number(entry.get(`event-start-time`)),
-      'date_to': Number(entry.get(`event-end-time`)),
-      'destination': {
-        ...this.getDestination(),
-        name: entry.get(`event-destination`),
-      }
-    });
+    const obj = Object.assign({},
+        this._data.toRAW(),
+        ModelPoint.updateAdapter(entry, this.getDestination));
 
-    this.getDestination();
     this.onChangeData(`update`, obj);
   }
 
@@ -95,7 +83,7 @@ export default class PointController extends AbstractComponent {
           return {
             src: picture.src,
             description: picture.alt
-          }
+          };
         }),
     };
   }
@@ -106,4 +94,4 @@ export default class PointController extends AbstractComponent {
     }
   }
 
-};
+}
